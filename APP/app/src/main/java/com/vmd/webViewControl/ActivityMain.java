@@ -26,7 +26,9 @@ import android.view.MenuItem;
 //import android.view.View;
 //import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
+import android.webkit.WebStorage;
 import android.webkit.WebView;
 //import android.widget.FrameLayout;
 //import android.widget.LinearLayout;
@@ -215,7 +217,11 @@ public class ActivityMain extends DroidGap  {
 	 */
 	protected void localClearCache() {
 		this.appView.clearCache(true);
-		Toast.makeText(getApplicationContext(), "cache cleared", Toast.LENGTH_SHORT).show();
+		this.appView.clearFormData();
+		this.appView.clearHistory();
+		WebStorage.getInstance().deleteAllData();
+		CookieManager.getInstance().removeAllCookie();
+		Toast.makeText(getApplicationContext(), "all cache cleared", Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -361,7 +367,7 @@ public class ActivityMain extends DroidGap  {
 
 		switch(item.getItemId()){
 			case R.id.exit:
-				finish();
+				System.exit(0); //finish();
 				break;
 	
 		case R.id.settings:
