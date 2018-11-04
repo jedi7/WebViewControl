@@ -36,6 +36,7 @@ import android.webkit.WebView;
 //import android.widget.PopupWindow;
 //import android.widget.TextView;
 import android.widget.Toast;
+import android.os.CountDownTimer;
 
 import org.apache.cordova.*;
 
@@ -232,11 +233,25 @@ public class ActivityMain extends DroidGap  {
 	 * @param failingUrl    failing URL
 	 */
 	public void onReceivedError(int errorCode, String description, String failingUrl) {
+		int retryUrlWaitTime = Integer.parseInt(settingsManager.getString("retryUrlWaitTime", "0"));
 		super.spinnerStop();
 		super.setStringProperty("loadingDialog", null);
 
+		if ( retryUrlWaitTime > 0 ) {
+			new CountDownTimer(retryUrlWaitTime, 5000) {
+				public void onTick(long millisUntilFinished) {
+					deviceControl.showToast(
+						getActivity(), "Retrying in " + (millisUntilFinished/1000) + " seconds", Toast.LENGTH_SHORT
+					);
+				}
+				public void onFinish() {
+					loadStartPage(); // super.loadUrl(failingUrl);
+				}
+			}.start();
+		}
+
 		failingUrl = this.appView.getUrl();
-		Log.d(TAG, "failingUrl: " + failingUrl + ", error: " + description + ", errorCode: " + errorCode);
+		Log.d(TAG, "failingUrl: " + failingUrl + ", error: " + description + ", errorCode: " + errorCode + ", retryTime: " + retryUrlWaitTime);
 		
 		this.appView.stopLoading();
 
@@ -248,7 +263,7 @@ public class ActivityMain extends DroidGap  {
 			this.appView.goBack();
 		} else {
 			super.loadUrl(
-				"file:///android_asset/www/index.html?notFound=" + failingUrl + "&descr=" + description + "&errorCode=" + errorCode
+				"file:///android_asset/www/index.html?notFound=" + failingUrl + "&descr=" + description + "&errorCode=" + errorCode + "&retryTime=" + retryUrlWaitTime
 			);		
 		}
 	}

@@ -36,6 +36,11 @@ function init() {
 	var elErrorCode = document.getElementById('errorCode');
 	elErrorCode.innerText = errorTxt;
 	
+	var retryTime = get_url_param('retryTime');
+	var elReloadTxt = document.getElementById('retryTxt');
+	var retryTxt = retryTime > 0 ? 'Retrying in ' + (retryTime/1000) + ' seconds...' : '';
+	elReloadTxt.innerText = retryTxt;
+
 	if (errUrl) {
 		document.getElementById('error').setAttribute('style','display: block;');
 	} else {

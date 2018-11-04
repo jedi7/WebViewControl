@@ -137,6 +137,13 @@
 			android:inputType="number"
 			android:defaultValue="20000" />
 
+		<EditTextPreference
+			android:key="retryUrlWaitTime"
+			android:title="URL Retry Wait:"
+			android:summary="Zeit in MS bis nach einem Fehler eine nicht geladene Seite neu geladen wird. (Benötigt einen Restart der App)"
+			android:inputType="number"
+			android:defaultValue="60000" />
+
 		<CheckBoxPreference
 			android:key="showDeveloperOptions"
 			android:title="Entwickler-Optionen im Hauptmenü anzeigen"
