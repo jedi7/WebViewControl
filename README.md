@@ -1,4 +1,4 @@
 WebViewControl
 ==============
 
-Fullscreen Browser APP für Android
+Fullscreen Browser APP for Android
